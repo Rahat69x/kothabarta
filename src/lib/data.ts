@@ -148,3 +148,13 @@ export async function fetchWriterRating(writerId: string) {
   return { rating, likes, followers, stories: ids.length };
 }
 
+export function resolveCoverUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  const match = url.match(/cover-(\d+)\.jpg/);
+  if (match) {
+    return `/covers/cover-${match[1]}.jpg`;
+  }
+  return url;
+}
+
+

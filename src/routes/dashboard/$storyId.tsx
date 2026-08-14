@@ -13,6 +13,7 @@ import {
   storyGenres,
   storyCategoryIds,
   uploadCover,
+  resolveCoverUrl,
   type Genre,
   type Part,
   type Status,
@@ -188,9 +189,9 @@ function StoryEditor() {
               accept="image/*"
               onChange={(e) => e.target.files?.[0] && onCoverPick(e.target.files[0])}
             />
-            {form.cover_url && (
+            {resolveCoverUrl(form.cover_url) && (
               <img
-                src={form.cover_url}
+                src={resolveCoverUrl(form.cover_url)!}
                 alt={form.title}
                 className="mt-2 aspect-[16/9] w-full rounded-md object-cover"
               />

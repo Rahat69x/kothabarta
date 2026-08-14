@@ -5,6 +5,7 @@ import {
   authorName,
   categoryName,
   storyGenres,
+  resolveCoverUrl,
   type Category,
   type Profile,
   type Story,
@@ -22,14 +23,15 @@ export function StoryCard({
   category?: Category | null;
 }) {
   const { t, lang } = useI18n();
+  const coverSrc = resolveCoverUrl(story.cover_url);
 
   return (
     <Link to="/story/$storyId" params={{ storyId: story.id }} className="group block h-full">
       <Card className="flex h-full flex-col overflow-hidden border-border/70 p-0 transition-shadow hover:shadow-lg">
         <div className="relative flex aspect-[3/4] w-full shrink-0 items-center justify-center overflow-hidden bg-secondary paper-texture">
-          {story.cover_url ? (
+          {coverSrc ? (
             <img
-              src={story.cover_url}
+              src={coverSrc}
               alt={story.title}
               loading="lazy"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

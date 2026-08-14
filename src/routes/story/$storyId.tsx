@@ -13,6 +13,7 @@ import {
   readingMinutes,
   storyGenres,
   storyCategoryIds,
+  resolveCoverUrl,
 } from "@/lib/data";
 import { fetchParts, fetchStory } from "@/lib/stories";
 import { Button } from "@/components/ui/button";
@@ -168,8 +169,8 @@ function StoryPage() {
         </div>
 
         <div className="order-first overflow-hidden rounded-lg bg-secondary paper-texture sm:order-last">
-          {story.cover_url ? (
-            <img src={story.cover_url} alt={story.title} className="h-full w-full object-cover" />
+          {resolveCoverUrl(story.cover_url) ? (
+            <img src={resolveCoverUrl(story.cover_url)!} alt={story.title} className="h-full w-full object-cover" />
           ) : (
             <div className="flex aspect-[3/4] items-center justify-center">
               <BookOpen className="h-10 w-10 text-muted-foreground" />
