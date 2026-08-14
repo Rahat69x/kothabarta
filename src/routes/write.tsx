@@ -28,9 +28,9 @@ export const Route = createFileRoute("/write")({
       { property: "og:description", content: "Publish a Bangla story or blog post in one click." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:url", content: "https://amrjaicchalikhmu.lovable.app/write" },
+      { property: "og:url", content: "/write" },
     ],
-    links: [{ rel: "canonical", href: "https://amrjaicchalikhmu.lovable.app/write" }],
+    links: [{ rel: "canonical", href: "/write" }],
   }),
   component: QuickWrite,
 });

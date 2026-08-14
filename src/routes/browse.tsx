@@ -46,9 +46,9 @@ export const Route = createFileRoute("/browse")({
         property: "og:description",
         content: "Search Bangla stories and filter by genre, category, status and region.",
       },
-      { property: "og:url", content: "https://amrjaicchalikhmu.lovable.app/browse" },
+      { property: "og:url", content: "/browse" },
     ],
-    links: [{ rel: "canonical", href: "https://amrjaicchalikhmu.lovable.app/browse" }],
+    links: [{ rel: "canonical", href: "/browse" }],
   }),
   component: Browse,
 });

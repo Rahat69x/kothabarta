@@ -23,9 +23,9 @@ export const Route = createFileRoute("/profile")({
       },
       { property: "og:title", content: "Writer profile — গল্পঘর" },
       { property: "og:description", content: "Set your writer identity on গল্পঘর." },
-      { property: "og:url", content: "https://amrjaicchalikhmu.lovable.app/profile" },
+      { property: "og:url", content: "/profile" },
     ],
-    links: [{ rel: "canonical", href: "https://amrjaicchalikhmu.lovable.app/profile" }],
+    links: [{ rel: "canonical", href: "/profile" }],
   }),
   component: ProfilePage,
 });

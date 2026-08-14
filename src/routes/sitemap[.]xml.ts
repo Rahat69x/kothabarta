@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 
-const BASE_URL = "https://amrjaicchalikhmu.lovable.app";
+const BASE_URL = process.env.VITE_SITE_URL || process.env.SITE_URL || "";
 
 interface SitemapEntry {
   path: string;

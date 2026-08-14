@@ -93,8 +93,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "গল্পঘর — বাংলা গল্প, প্রবন্ধ ও অভিজ্ঞতার প্ল্যাটফর্ম" },
       { property: "og:description", content: "Browse Bangla fiction, non-fiction and personal experience blogs by category, genre and status. Write and publish serialized parts." },
       { name: "twitter:description", content: "Browse Bangla fiction, non-fiction and personal experience blogs by category, genre and status. Write and publish serialized parts." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/82f7f070-25a8-4919-91f8-55de8b5d9876/id-preview-77130843--afba3c35-c3d9-428d-93a4-9f432b8593b5.lovable.app-1785438698900.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/82f7f070-25a8-4919-91f8-55de8b5d9876/id-preview-77130843--afba3c35-c3d9-428d-93a4-9f432b8593b5.lovable.app-1785438698900.png" },
+      { property: "og:image", content: "/og-image.png" },
+      { name: "twitter:image", content: "/og-image.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

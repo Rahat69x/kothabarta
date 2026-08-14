@@ -26,9 +26,9 @@ export const Route = createFileRoute("/")({
         content:
           "Browse Bangla fiction, non-fiction and personal experience blogs by category, genre and status. Write and publish serialized parts.",
       },
-      { property: "og:url", content: "https://amrjaicchalikhmu.lovable.app/" },
+      { property: "og:url", content: "/" },
     ],
-    links: [{ rel: "canonical", href: "https://amrjaicchalikhmu.lovable.app/" }],
+    links: [{ rel: "canonical", href: "/" }],
   }),
   component: Home,
 });

@@ -16,9 +16,9 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in or create a writer account on গল্পঘর." },
       { property: "og:title", content: "Sign in — গল্পঘর" },
       { property: "og:description", content: "Create a writer account and start publishing." },
-      { property: "og:url", content: "https://amrjaicchalikhmu.lovable.app/auth" },
+      { property: "og:url", content: "/auth" },
     ],
-    links: [{ rel: "canonical", href: "https://amrjaicchalikhmu.lovable.app/auth" }],
+    links: [{ rel: "canonical", href: "/auth" }],
   }),
   component: AuthPage,
 });
