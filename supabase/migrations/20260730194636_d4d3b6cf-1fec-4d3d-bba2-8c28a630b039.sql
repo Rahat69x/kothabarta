@@ -1,0 +1,2 @@
+CREATE POLICY "own likes update" ON public.likes FOR UPDATE TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "writer deletes comments on own stories" ON public.comments FOR DELETE TO authenticated USING (EXISTS (SELECT 1 FROM public.parts p JOIN public.stories s ON s.id = p.story_id WHERE p.id = comments.part_id AND s.writer_id = auth.uid()));
