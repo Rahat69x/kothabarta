@@ -52,16 +52,6 @@ function AuthPage() {
     toast.success("Check your inbox to confirm your email.");
   }
 
-  async function google() {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/profile`,
-      },
-    });
-    if (error) return toast.error(error.message);
-  }
-
   return (
     <div className="mx-auto flex max-w-md flex-col justify-center px-4 py-16">
       <Card>
@@ -106,11 +96,6 @@ function AuthPage() {
               </TabsContent>
             ))}
           </Tabs>
-
-          <div className="my-4 h-px bg-border" />
-          <Button variant="outline" className="w-full" onClick={google}>
-            {t("continueGoogle")}
-          </Button>
         </CardContent>
       </Card>
     </div>
