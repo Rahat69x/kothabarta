@@ -31,3 +31,10 @@ npm run build
 - **Styling**: Tailwind CSS
 - **Database & Auth**: Supabase
 - **Language**: TypeScript
+
+## Contributors
+
+- **Mahamudul Hasan Rahat** ([@Rahat69x](https://github.com/Rahat69x))
+- **Mahdi Ebene Mahmud** ([@m4hdiebene](https://github.com/m4hdiebene))
+
+View detailed statistics on the [Contributors Graph](https://github.com/Rahat69x/kothabarta/graphs/contributors).
