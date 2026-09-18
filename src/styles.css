@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system — গল্পঘর (Kothabarta)
- * Warm paper cream, deep maroon ink, brass accent, midnight obsidian library.
+ * Design system — জানুন, পড়ুন, লিখুন (Newspaper Editorial)
+ * Strict Monochrome / Grayscale: Pure Black, Crisp White, Editorial Gray
  */
 
 @theme inline {
@@ -14,11 +14,11 @@
   --font-sans: "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+  --radius-2xl: 8px;
   
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -43,48 +43,48 @@
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(1 0 0); /* Pure crisp white */
-  --foreground: oklch(0.14 0.015 250); /* Deep charcoal ink */
-  --card: oklch(0.995 0.002 90);
-  --card-foreground: oklch(0.14 0.015 250);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0.015 250);
-  --primary: oklch(0.42 0.14 24); /* Deep crimson maroon */
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.965 0.005 90);
-  --secondary-foreground: oklch(0.25 0.02 250);
-  --muted: oklch(0.965 0.004 90);
-  --muted-foreground: oklch(0.48 0.02 250);
-  --accent: oklch(0.72 0.14 75); /* Antique brass / gold */
-  --accent-foreground: oklch(0.18 0.03 60);
-  --destructive: oklch(0.55 0.2 27);
-  --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.92 0.008 90);
-  --input: oklch(0.92 0.008 90);
-  --ring: oklch(0.42 0.14 24);
+  --radius: 0.125rem;
+  --background: #ffffff; /* Newsprint pure white */
+  --foreground: #000000; /* Rich editorial black ink */
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #09090b;
+  --muted: #f4f4f5;
+  --muted-foreground: #52525b;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+  --destructive: #18181b;
+  --destructive-foreground: #ffffff;
+  --border: #000000;
+  --input: #d4d4d8;
+  --ring: #000000;
 }
 
 .dark {
-  --background: oklch(0.15 0.015 45); /* Midnight obsidian study */
-  --foreground: oklch(0.95 0.012 84);
-  --card: oklch(0.19 0.018 45);
-  --card-foreground: oklch(0.95 0.012 84);
-  --popover: oklch(0.19 0.018 45);
-  --popover-foreground: oklch(0.95 0.012 84);
-  --primary: oklch(0.58 0.17 24); /* Glowing velvet crimson */
-  --primary-foreground: oklch(0.98 0.01 84);
-  --secondary: oklch(0.24 0.02 45);
-  --secondary-foreground: oklch(0.95 0.012 84);
-  --muted: oklch(0.22 0.018 45);
-  --muted-foreground: oklch(0.72 0.02 70);
-  --accent: oklch(0.76 0.14 75); /* Glowing candlelight amber */
-  --accent-foreground: oklch(0.16 0.02 45);
-  --destructive: oklch(0.62 0.19 27);
-  --destructive-foreground: oklch(0.98 0.01 84);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.58 0.17 24);
+  --background: #09090b; /* Editorial deep black */
+  --foreground: #fafafa; /* Crisp newsprint white */
+  --card: #121215;
+  --card-foreground: #fafafa;
+  --popover: #121215;
+  --popover-foreground: #fafafa;
+  --primary: #ffffff;
+  --primary-foreground: #09090b;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #18181b;
+  --muted-foreground: #a1a1aa;
+  --accent: #e4e4e7;
+  --accent-foreground: #09090b;
+  --destructive: #ffffff;
+  --destructive-foreground: #09090b;
+  --border: #3f3f46;
+  --input: #3f3f46;
+  --ring: #ffffff;
 }
 
 @layer base {
@@ -113,59 +113,19 @@
   }
 }
 
-/* 3D Book & Spatial Utilities */
-@utility perspective-1200 {
-  perspective: 1200px;
+/* Newspaper editorial styles */
+@utility news-double-rule {
+  border-top: 3px double currentColor;
 }
 
-@utility preserve-3d {
-  transform-style: preserve-3d;
-}
-
-@utility backface-hidden {
-  backface-visibility: hidden;
-}
-
-/* 3D Book Spine Effect */
-@utility book-spine-left {
-  position: relative;
-  box-shadow: 
-    -4px 0 8px -2px rgba(0, 0, 0, 0.35),
-    inset 4px 0 6px -2px rgba(255, 255, 255, 0.25),
-    inset -4px 0 8px -2px rgba(0, 0, 0, 0.45);
-}
-
-/* 3D Book Layering Page Edges */
-@utility book-page-edges {
-  box-shadow:
-    2px 2px 5px rgba(0, 0, 0, 0.25),
-    4px 4px 8px rgba(0, 0, 0, 0.2),
-    inset -2px 0 3px rgba(0, 0, 0, 0.15);
-}
-
-/* Glassmorphism for Literary surfaces */
-@utility glass-shelf {
-  background: color-mix(in oklch, var(--color-card) 80%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid color-mix(in oklch, var(--color-border) 70%, transparent);
-}
-
-@utility glass-book-card {
-  background: color-mix(in oklch, var(--color-card) 90%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid color-mix(in oklch, var(--color-border) 80%, transparent);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@utility paper-texture {
-  background-image: radial-gradient(
-    circle at 1px 1px,
-    color-mix(in oklch, var(--color-foreground) 6%, transparent) 1px,
-    transparent 0
+@utility news-column-rule {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    currentColor 0,
+    currentColor 4px,
+    transparent 4px,
+    transparent 8px
   );
-  background-size: 24px 24px;
 }
 
 @utility no-scrollbar {
@@ -178,28 +138,28 @@
 
 @utility prose-reader {
   font-size: 1.125rem;
-  line-height: 2.05;
+  line-height: 2.1;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-/* Scoped Reader Themes */
+/* Scoped Reader Themes (Strict Grayscale) */
 .reader-sepia {
-  --background: oklch(0.955 0.028 85);
-  --foreground: oklch(0.29 0.028 55);
-  --muted-foreground: oklch(0.48 0.03 60);
-  --card: oklch(0.965 0.024 85);
-  --border: oklch(0.86 0.03 80);
+  --background: #f7f7f5;
+  --foreground: #1c1917;
+  --muted-foreground: #57534e;
+  --card: #ffffff;
+  --border: #d6d3d1;
   background-color: var(--background);
   color: var(--foreground);
 }
 
 .reader-dark {
-  --background: oklch(0.14 0.015 45);
-  --foreground: oklch(0.93 0.012 84);
-  --muted-foreground: oklch(0.72 0.02 70);
-  --card: oklch(0.18 0.018 45);
-  --border: oklch(1 0 0 / 12%);
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --muted-foreground: #a1a1aa;
+  --card: #18181b;
+  --border: #3f3f46;
   background-color: var(--background);
   color: var(--foreground);
 }

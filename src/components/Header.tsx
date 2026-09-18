@@ -54,21 +54,21 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b-2 border-foreground/90 bg-background/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-[1600px] items-center gap-3 px-4 sm:px-8">
-        <Link to="/" className="flex min-w-0 items-center gap-2">
+        <Link to="/" className="flex min-w-0 items-center gap-2.5">
           <img
             src={logo}
-            alt="গল্পঘর logo"
+            alt="লোগো"
             width={40}
             height={40}
-            className="h-9 w-9 shrink-0 object-contain"
+            className="h-9 w-9 shrink-0 object-contain grayscale contrast-150 dark:invert"
           />
           <span className="min-w-0 leading-tight">
-            <span className="block truncate font-display text-lg font-semibold tracking-tight sm:text-xl">
+            <span className="block truncate font-display text-lg font-bold tracking-tight sm:text-xl">
               {t("appName")}
             </span>
-            <span className="block truncate text-[11px] tracking-wide text-muted-foreground">
+            <span className="block truncate text-[11px] font-mono tracking-wider uppercase text-muted-foreground">
               {t("motto")}
             </span>
           </span>
