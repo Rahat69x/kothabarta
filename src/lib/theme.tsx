@@ -20,8 +20,8 @@ function readTheme(): Theme {
   if (typeof document === "undefined") return "light";
   if (document.documentElement.classList.contains("dark")) return "dark";
   const stored = window.localStorage.getItem("theme");
-  if (stored === "dark" || stored === "light") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  if (stored === "dark") return "dark";
+  return "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

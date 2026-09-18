@@ -3,14 +3,15 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 export type Lang = "bn" | "en";
 
 const dict = {
-  appName: { bn: "গল্পঘর", en: "Golpoghor" },
+  appName: { bn: "জানুন, পড়ুন, লিখুন", en: "Know, Read, Write" },
   tagline: {
-    bn: "বাংলা লেখকদের গল্প, প্রবন্ধ আর অভিজ্ঞতার ঘর",
-    en: "A home for Bangla stories, essays and lived experience",
+    bn: "জানুন, পড়ুন, লিখুন — বাংলা গল্প, প্রবন্ধ ও অভিজ্ঞতার ঘর",
+    en: "Know, Read, Write — Bangla stories, essays and lived experience",
   },
+  motto: { bn: "গল্পঘর · সাহিত্যের মুক্তাঙ্গন", en: "Golpoghor · Open Literary Space" },
   heroLead: {
-    bn: "নিজের নামে অথবা ছদ্মনামে লিখুন — পর্বে পর্বে প্রকাশ করুন।",
-    en: "Write under your real name or a pen name — publish part by part.",
+    bn: "নিজের নামে অথবা ছদ্মনামে লিখুন — জানুন ও পড়ুন সেরা সব সাহিত্যকর্ম।",
+    en: "Write under your real name or a pen name — discover and read timeless literature.",
   },
   browse: { bn: "পড়ুন", en: "Browse" },
   write: { bn: "লিখুন", en: "Write" },
