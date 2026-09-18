@@ -42,7 +42,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const CONTAINER_WIDTH = "mx-auto w-full max-w-[1720px] px-4 sm:px-8 lg:px-12";
+const CONTAINER_WIDTH = "w-full px-4 sm:px-8 lg:px-12 xl:px-16";
 
 function Shelf({
   title,

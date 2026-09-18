@@ -92,11 +92,11 @@ function Browse() {
     genre !== "all" || status !== "all" || categoryId !== "all" || regional !== "all" || !!query;
 
   return (
-    <div className="mx-auto w-full max-w-[1720px] px-4 py-8 sm:px-8 lg:px-12">
+    <div className="w-full px-4 py-8 sm:px-8 lg:px-12 xl:px-16">
       <h1 className="font-display text-2xl font-bold sm:text-3xl">{t("browseTitle")}</h1>
 
       <form
-        className="relative mt-5 max-w-2xl"
+        className="relative mt-5 max-w-3xl lg:max-w-4xl"
         role="search"
         onSubmit={(e) => {
           e.preventDefault();
@@ -297,7 +297,7 @@ function Browse() {
           {t("results")}: {data?.stories.length ?? 0}
         </h2>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7">
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8">
           {isLoading &&
             Array.from({ length: 12 }).map((_, i) => <Skeleton key={i} className="h-72 w-full" />)}
           {data?.stories.map((s) => (
