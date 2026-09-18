@@ -7,9 +7,6 @@ import {
   PenLine,
   BookOpen,
   HelpCircle,
-  Sparkles,
-  Feather,
-  Flame,
   ArrowRight,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
@@ -18,7 +15,6 @@ import { fetchStories } from "@/lib/stories";
 import { StoryCard } from "@/components/StoryCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LiteraryUniverse3D } from "@/components/3d/LiteraryUniverse3D";
 import heroImage from "@/assets/hero-books-wall.jpg";
 import heroImageLight from "@/assets/hero-books-wall-light.jpg";
 
@@ -44,7 +40,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const SHELF_WIDTH = "mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8";
+const CONTAINER_WIDTH = "mx-auto w-full max-w-[1720px] px-4 sm:px-8 lg:px-12";
 
 function Shelf({
   title,
@@ -86,13 +82,13 @@ function Shelf({
   const scrollBy = (dir: -1 | 1) => {
     const el = scrollerRef.current;
     if (!el) return;
-    el.scrollBy({ left: dir * Math.max(el.clientWidth * 0.75, 240), behavior: "smooth" });
+    el.scrollBy({ left: dir * Math.max(el.clientWidth * 0.8, 260), behavior: "smooth" });
   };
 
   if (!isLoading && (data?.stories.length ?? 0) === 0) return null;
 
   return (
-    <section className={`${SHELF_WIDTH} py-8 relative`}>
+    <section className={`${CONTAINER_WIDTH} py-6 sm:py-8`}>
       {/* Shelf Header */}
       <div className="flex items-end justify-between gap-4 mb-4">
         <div>
@@ -122,7 +118,7 @@ function Shelf({
         </Button>
       </div>
 
-      {/* Scroller Frame */}
+      {/* Horizontal Scroller */}
       <div className="group relative">
         {canLeft && (
           <button
@@ -149,19 +145,22 @@ function Shelf({
         <div
           ref={scrollerRef}
           onScroll={update}
-          className="no-scrollbar flex snap-x items-stretch gap-4 sm:gap-5 overflow-x-auto pb-4 pt-2"
+          className="no-scrollbar flex snap-x items-stretch gap-4 overflow-x-auto pb-3 pt-1 sm:gap-5"
         >
           {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-68 w-40 sm:w-48 shrink-0 rounded-xl" />
+            Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton key={i} className="h-64 w-40 shrink-0 rounded-xl sm:h-72 sm:w-44" />
             ))}
 
-          {data?.stories.slice(0, 14).map((s) => (
-            <div key={s.id} className="w-38 sm:w-48 lg:w-52 shrink-0 snap-start">
+          {data?.stories.map((story) => (
+            <div
+              key={story.id}
+              className="w-40 shrink-0 snap-start sm:w-48 lg:w-52 transition-transform duration-200"
+            >
               <StoryCard
-                story={s}
-                profile={data.profiles[s.writer_id]}
-                category={s.category_id ? catById[s.category_id] : null}
+                story={story}
+                profile={data.profiles[story.writer_id]}
+                category={story.category_id ? catById[story.category_id] : null}
               />
             </div>
           ))}
@@ -171,68 +170,101 @@ function Shelf({
   );
 }
 
-function GenreExplorer() {
-  const genres = [
-    {
-      id: "fiction",
-      title: "কল্পকাহিনি",
-      subtitle: "উপন্যাস ও রূপকথা",
-      icon: Sparkles,
-      color: "from-rose-500/15 via-primary/10 to-amber-500/15",
-      border: "hover:border-primary/60",
-    },
-    {
-      id: "nonfiction",
-      title: "প্রবন্ধ ও চিন্তা",
-      subtitle: "মননশীল বিশ্লেষণ",
-      icon: Feather,
-      color: "from-amber-500/15 via-accent/10 to-emerald-500/15",
-      border: "hover:border-accent/60",
-    },
-    {
-      id: "experience",
-      title: "বাস্তব অভিজ্ঞতা",
-      subtitle: "জীবনের না বলা গল্প",
-      icon: Flame,
-      color: "from-emerald-500/15 via-teal-500/10 to-cyan-500/15",
-      border: "hover:border-emerald-500/60",
-    },
-    {
-      id: "all",
-      title: "সব বই ও রচনা",
-      subtitle: "মুক্ত সাহিত্য লাইব্রেরি",
-      icon: BookOpen,
-      color: "from-blue-500/15 via-indigo-500/10 to-purple-500/15",
-      border: "hover:border-blue-500/60",
-    },
-  ];
+function CorePillarsSection() {
+  const scrollToKnow = () => {
+    const el = document.getElementById("know-section");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <section className={`${SHELF_WIDTH} py-8 sm:py-10`}>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-        {genres.map((g) => {
-          const Icon = g.icon;
-          return (
-            <Link
-              key={g.id}
-              to="/browse"
-              search={g.id === "all" ? {} : { genre: g.id as Genre }}
-              className={`group relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-br ${g.color} p-4 sm:p-5 backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl ${g.border}`}
+    <section className="relative z-20 -mt-6 sm:-mt-8 mb-6 sm:mb-10">
+      <div className={CONTAINER_WIDTH}>
+        <div className="overflow-hidden rounded-2xl border-2 border-black bg-white text-black shadow-2xl">
+          {/* Header Bar */}
+          <div className="border-b-2 border-black bg-black px-4 sm:px-6 py-2.5 text-white flex items-center justify-between">
+            <span className="font-mono text-[11px] sm:text-xs font-bold uppercase tracking-widest text-neutral-200">
+              প্রধান তিনটি স্তম্ভ • Core Pillars
+            </span>
+            <span className="hidden sm:inline font-mono text-[11px] text-neutral-400">
+              জানুন • পড়ুন • লিখুন
+            </span>
+          </div>
+
+          {/* 3 Pillars Grid */}
+          <div className="grid grid-cols-1 divide-y-2 divide-black sm:grid-cols-3 sm:divide-x-2 sm:divide-y-0">
+            {/* 1. জানুন */}
+            <button
+              type="button"
+              onClick={scrollToKnow}
+              className="group flex flex-col justify-between p-5 sm:p-6 text-left transition-colors duration-150 hover:bg-black hover:text-white"
             >
-              <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-background/80 text-foreground shadow-sm group-hover:scale-110 transition-transform">
-                <Icon className="h-5 w-5 text-primary" />
-              </div>
-              <div className="mt-3 sm:mt-4">
-                <h3 className="font-display text-sm sm:text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                  {g.title}
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-mono font-bold tracking-wider opacity-60 group-hover:opacity-100">
+                  <span>০১ • জানুন</span>
+                  <HelpCircle className="h-4 w-4" />
+                </div>
+                <h3 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight mt-2">
+                  জানুন
                 </h3>
-                <p className="text-[11px] text-muted-foreground font-sans mt-0.5">
-                  {g.subtitle}
+                <p className="mt-1.5 text-xs sm:text-sm leading-relaxed opacity-75 group-hover:opacity-90">
+                  প্ল্যাটফর্মের উদ্দেশ্য, উন্মুক্ত প্রকাশনার দর্শন ও সাহিত্য নির্দেশিকা
                 </p>
               </div>
+              <div className="mt-4 inline-flex items-center text-xs font-bold group-hover:underline">
+                <span>বিস্তারিত জানুন</span>
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </button>
+
+            {/* 2. পড়ুন */}
+            <Link
+              to="/browse"
+              className="group flex flex-col justify-between p-5 sm:p-6 text-left transition-colors duration-150 hover:bg-black hover:text-white"
+            >
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-mono font-bold tracking-wider opacity-60 group-hover:opacity-100">
+                  <span>০২ • পড়ুন</span>
+                  <BookOpen className="h-4 w-4" />
+                </div>
+                <h3 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight mt-2">
+                  পড়ুন
+                </h3>
+                <p className="mt-1.5 text-xs sm:text-sm leading-relaxed opacity-75 group-hover:opacity-90">
+                  হাজারো গল্প, ধারাবাহিক উপন্যাস ও মননশীল প্রবন্ধের উন্মুক্ত সংগ্রহশালা
+                </p>
+              </div>
+              <div className="mt-4 inline-flex items-center text-xs font-bold group-hover:underline">
+                <span>লাইব্রেরি ব্রাউজ করুন</span>
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
             </Link>
-          );
-        })}
+
+            {/* 3. লিখুন */}
+            <Link
+              to="/write"
+              className="group flex flex-col justify-between p-5 sm:p-6 text-left transition-colors duration-150 hover:bg-black hover:text-white"
+            >
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-mono font-bold tracking-wider opacity-60 group-hover:opacity-100">
+                  <span>০৩ • লিখুন</span>
+                  <PenLine className="h-4 w-4" />
+                </div>
+                <h3 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight mt-2">
+                  লিখুন
+                </h3>
+                <p className="mt-1.5 text-xs sm:text-sm leading-relaxed opacity-75 group-hover:opacity-90">
+                  নিজের কথা ও মৌলিক সাহিত্য প্রকাশ করুন নিজের নামে অথবা ছদ্মনামে
+                </p>
+              </div>
+              <div className="mt-4 inline-flex items-center text-xs font-bold group-hover:underline">
+                <span>লেখা শুরু করুন</span>
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -240,28 +272,24 @@ function GenreExplorer() {
 
 function KnowSection() {
   return (
-    <section
-      id="know-section"
-      className={`${SHELF_WIDTH} py-12 sm:py-16 scroll-mt-20`}
-    >
-      <div className="rounded-3xl border border-border/80 bg-card/60 p-6 sm:p-10 backdrop-blur-xl shadow-2xl">
-        <div className="border-b border-border/60 pb-4 mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+    <section id="know-section" className={`${CONTAINER_WIDTH} py-10 sm:py-14 scroll-mt-20`}>
+      <div className="rounded-2xl border border-border/70 bg-card/50 p-6 sm:p-10 backdrop-blur-sm shadow-xl">
+        <div className="border-b border-border/60 pb-4 mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
             <span className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
               সাহিত্য নির্দেশিকা • LITERARY GUIDE
             </span>
-            <h2 className="font-display text-2xl sm:text-4xl font-extrabold text-foreground mt-1">
-              জানুন: প্ল্যাটফর্ম সম্পর্কে
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mt-1">
+              জানুন: গল্পঘর সম্পর্কে
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground max-w-md">
-            স্বাধীন ও উন্মুক্ত সাহিত্য ভাবনার জন্য পাঠক-লেখকদের এক সার্বজনীন মিলনমেলা।
+            স্বাধীন ও উন্মুক্ত সাহিত্য ভাবনার জন্য পাঠক-লেখকদের সার্বজনীন মিলনমেলা।
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1 */}
-          <div className="rounded-2xl border border-border/60 bg-background/60 p-5 sm:p-6 space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="rounded-xl border border-border/60 bg-background/50 p-5 space-y-2.5">
             <div className="flex items-center justify-between">
               <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 font-mono text-xs font-bold text-primary">
                 ০১
@@ -272,12 +300,11 @@ function KnowSection() {
               উদ্দেশ্য ও দর্শন
             </h3>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              ‘জানুন, পড়ুন, লিখুন’ হলো বাংলা সাহিত্যের স্বাধীন ও মুক্তচিন্তার এক অনন্য অঙ্গন। প্রতিটি মানুষের অন্তরে জমা থাকা সুপ্ত ভাবনা ও গল্পগুলোকে প্রাতিষ্ঠানিক বাধা ছাড়া পাঠকের দরবারে পৌঁছে দেওয়াই আমাদের ব্রত।
+              ‘জানুন, পড়ুন, লিখুন’ হলো বাংলা সাহিত্যের মুক্তচিন্তার এক অনন্য অঙ্গন। প্রাতিষ্ঠানিক বাধ্যবাধকতা ছাড়াই মনের ভাব প্রকাশের সুযোগ।
             </p>
           </div>
 
-          {/* Card 2 */}
-          <div className="rounded-2xl border border-border/60 bg-background/60 p-5 sm:p-6 space-y-3">
+          <div className="rounded-xl border border-border/60 bg-background/50 p-5 space-y-2.5">
             <div className="flex items-center justify-between">
               <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 font-mono text-xs font-bold text-primary">
                 ০২
@@ -288,12 +315,11 @@ function KnowSection() {
               লেখকদের স্বাধিকার
             </h3>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              এখানে লেখক সম্পূর্ণ স্বাধীন। আপনি নিজের আসল নাম কিংবা পছন্দমতো ছদ্মনামে প্রকাশ করতে পারেন একক লেখা অথবা বহু পর্বের ধারাবাহিক উপন্যাস। প্রতিটি লেখার উপর লেখকের পূর্ণ স্বত্ব সংরক্ষিত।
+              আসল নাম কিংবা পছন্দমতো ছদ্মনামে প্রকাশ করুন ছোটগল্প অথবা বহু পর্বের ধারাবাহিক উপন্যাস। প্রতিটি লেখার পূর্ণ স্বত্ব আপনার।
             </p>
           </div>
 
-          {/* Card 3 */}
-          <div className="rounded-2xl border border-border/60 bg-background/60 p-5 sm:p-6 space-y-3">
+          <div className="rounded-xl border border-border/60 bg-background/50 p-5 space-y-2.5">
             <div className="flex items-center justify-between">
               <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 font-mono text-xs font-bold text-primary">
                 ০৩
@@ -304,53 +330,10 @@ function KnowSection() {
               পাঠ ও সুস্থ মূল্যায়ন
             </h3>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              পাঠকরা এখানে সম্পূর্ণ বিজ্ঞাপনমুক্ত ও পরিচ্ছন্ন পরিবেশে গল্প-প্রবন্ধ উপভোগ করতে পারবেন। প্রিয় লেখককে ফলো করা, রেটিং দেওয়া এবং গঠনমূলক মন্তব্য করে লেখকদের উৎসাহিত করার সুযোগ রয়েছে।
+              বিজ্ঞাপনমুক্ত পরিচ্ছন্ন পরিবেশে গল্প উপভোগ করুন। প্রিয় লেখককে অনুসরণ করুন এবং গঠনমূলক রেটিং ও মন্তব্য জানান।
             </p>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function CommunityCallout() {
-  return (
-    <section className={`${SHELF_WIDTH} py-10 sm:py-14`}>
-      <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card/80 to-accent/10 p-8 sm:p-12 backdrop-blur-xl shadow-2xl">
-        <div className="max-w-2xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/15 border border-primary/30 text-xs font-semibold text-primary mb-4">
-            <Feather className="h-3.5 w-3.5" />
-            <span>লেখকদের জন্য উন্মুক্ত প্ল্যাটফর্ম</span>
-          </div>
-
-          <h2 className="font-display text-2xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight">
-            আপনার মনের ভাবনায় রচিত হোক নতুন কোনো অমর আখ্যান
-          </h2>
-
-          <p className="mt-3 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-            গল্পঘরে নিজের নামে অথবা সম্পূর্ণ ছদ্মনামে প্রকাশ করুন ছোটগল্প, ধারাবাহিক উপন্যাস কিংবা
-            ব্যক্তিগত স্মৃতিচারণ। পাঠকের প্রতিক্রিয়া জানুন এবং গড়ে তুলুন আপনার নিজস্ব সাহিত্য বলয়।
-          </p>
-
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <Button asChild size="lg" className="rounded-xl px-6 bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:opacity-90">
-              <Link to="/write">
-                <PenLine className="mr-2 h-4 w-4" />
-                <span>আজই লেখা শুরু করুন</span>
-              </Link>
-            </Button>
-
-            <Button asChild variant="outline" size="lg" className="rounded-xl px-6 border-border/80 hover:bg-secondary">
-              <Link to="/browse">
-                <BookOpen className="mr-2 h-4 w-4 text-accent" />
-                <span>লাইব্রেরি দেখুন</span>
-              </Link>
-            </Button>
-          </div>
-        </div>
-
-        {/* Ambient subtle decorative glow */}
-        <div className="pointer-events-none absolute -right-16 -bottom-16 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
       </div>
     </section>
   );
@@ -364,18 +347,11 @@ function Home() {
     [categories]
   );
 
-  const scrollToKnow = () => {
-    const el = document.getElementById("know-section");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <div className="bg-background text-foreground min-h-screen pb-20 relative overflow-x-hidden">
-      {/* 1. 3D INTERACTIVE DARK HERO SECTION */}
-      <section className="relative isolate flex min-h-[460px] sm:min-h-[540px] lg:min-h-[600px] items-center overflow-hidden border-b border-border/70">
-        {/* Visual Book Covers Wall Background */}
+    <div className="bg-background text-foreground min-h-screen pb-16 relative overflow-x-hidden">
+      {/* 1. CLEAN FULL-WIDTH HERO SECTION (ORIGINAL KOTHABARTA FORMAT) */}
+      <section className="relative isolate flex min-h-[360px] sm:min-h-[440px] lg:min-h-[500px] items-center overflow-hidden border-b border-border/70">
+        {/* Book Covers Wall Background Image */}
         <img
           src={heroImageLight}
           alt="বইয়ের কভার দেয়াল"
@@ -392,40 +368,37 @@ function Home() {
           className="absolute inset-0 -z-20 hidden h-full w-full object-cover dark:block"
         />
 
-        {/* Atmospheric Cinematic Gradients for Deep Contrast */}
+        {/* Readability Gradient */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-background/95 via-background/85 to-background sm:bg-gradient-to-r sm:from-background/95 sm:via-background/85 sm:to-background/40"
+          className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-background/90 via-background/80 to-background sm:bg-gradient-to-r sm:from-background/95 sm:via-background/75 sm:to-transparent"
           aria-hidden="true"
         />
 
-        {/* Real-time 3D WebGL Literary Universe */}
-        <LiteraryUniverse3D interactive={true} />
-
-        {/* Hero Content */}
-        <div className={`${SHELF_WIDTH} py-12 sm:py-20 lg:py-24 relative z-10`}>
-          <div className="max-w-2xl">
+        {/* Hero Typography & Actions */}
+        <div className={`${CONTAINER_WIDTH} py-12 sm:py-16 lg:py-20 relative z-10`}>
+          <div className="max-w-3xl">
             {/* Tagline Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/15 border border-primary/30 mb-4 text-[11px] font-semibold tracking-wider text-primary uppercase backdrop-blur-md">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-ping" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/15 border border-primary/30 mb-3.5 text-[11px] font-semibold tracking-wider text-primary uppercase backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               <span>{t("appName")} · {t("motto")}</span>
             </div>
 
             {/* Main Title */}
-            <h1 className="font-display text-3xl leading-tight font-extrabold text-foreground sm:text-5xl sm:leading-tight lg:text-6xl drop-shadow-sm">
+            <h1 className="font-display text-3xl leading-snug font-extrabold text-foreground sm:text-4xl sm:leading-tight lg:text-5xl">
               জানুন, পড়ুন, লিখুন
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-3 max-w-xl text-xs sm:text-base text-muted-foreground leading-relaxed">
-              বাংলা গল্প, প্রবন্ধ ও বাস্তব অভিজ্ঞতার উন্মুক্ত সাহিত্য ঘর — নিজের নামে অথবা ছদ্মনামে লিখুন, জানুন এবং পড়ুন সেরা সব লেখা।
+            <p className="mt-3 max-w-2xl text-xs sm:text-base text-muted-foreground leading-relaxed">
+              বাংলা গল্প, প্রবন্ধ ও বাস্তব অভিজ্ঞতার উন্মুক্ত সাহিত্য প্ল্যাটফর্ম — নিজের নামে অথবা ছদ্মনামে লিখুন, জানুন এবং পড়ুন সেরা সব লেখা।
             </p>
 
-            {/* CTAs */}
+            {/* Action Buttons */}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Button
                 asChild
                 size="lg"
-                className="h-11 sm:h-12 px-7 rounded-xl bg-primary text-primary-foreground font-semibold shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all gap-2"
+                className="h-10 sm:h-11 px-6 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:opacity-90 transition-all gap-2"
               >
                 <Link to="/write">
                   <PenLine className="h-4 w-4" />
@@ -437,7 +410,7 @@ function Home() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="h-11 sm:h-12 px-7 rounded-xl border-border/80 bg-background/80 hover:bg-secondary text-foreground backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all gap-2"
+                className="h-10 sm:h-11 px-6 rounded-xl border-border/80 bg-background/80 hover:bg-secondary text-foreground backdrop-blur-sm transition-all gap-2"
               >
                 <Link to="/browse">
                   <BookOpen className="h-4 w-4 text-accent" />
@@ -449,122 +422,17 @@ function Home() {
         </div>
       </section>
 
-      {/* 2. THREE-PART HOMEPAGE LAYOUT — জানুন, পড়ুন, লিখুন (HIGH-CONTRAST B&W ACCENT SECTION) */}
-      <section className="relative z-20 -mt-6 sm:-mt-10 mb-6 sm:mb-12">
-        <div className={SHELF_WIDTH}>
-          <div className="overflow-hidden rounded-2xl border-2 border-black bg-white text-black shadow-2xl ring-1 ring-white/10">
-            {/* Top B&W Editorial Header Tag */}
-            <div className="border-b-2 border-black bg-black px-4 py-2 text-white flex items-center justify-between">
-              <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-neutral-200">
-                প্রধান তিনটি স্তম্ভ • Core Pillars
-              </span>
-              <span className="hidden sm:inline font-mono text-[11px] tracking-wider text-neutral-400">
-                জানুন · পড়ুন · লিখুন
-              </span>
-            </div>
+      {/* 2. THREE-PART HOMEPAGE SECTION — জানুন, পড়ুন, লিখুন (STARK B&W ACCENT) */}
+      <CorePillarsSection />
 
-            <nav
-              aria-label="প্রধান তিনটি স্তম্ভ"
-              className="grid grid-cols-1 md:grid-cols-3 divide-y-2 md:divide-y-0 md:divide-x-2 divide-black"
-            >
-              {/* Pillar 1: জানুন (Know) */}
-              <button
-                type="button"
-                onClick={scrollToKnow}
-                className="group flex min-h-[96px] sm:min-h-[120px] w-full flex-col justify-center p-5 text-left transition-colors duration-150 hover:bg-black hover:text-white focus-visible:outline-2 focus-visible:outline-black cursor-pointer"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs uppercase tracking-widest font-bold opacity-70 group-hover:opacity-100">
-                    ০১ • জানুন
-                  </span>
-                  <HelpCircle className="h-5 w-5 stroke-2 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-transform" />
-                </div>
-                <span className="mt-1 font-display text-2xl sm:text-3xl font-black tracking-tight">
-                  জানুন
-                </span>
-                <span className="mt-1 text-xs font-sans text-neutral-600 group-hover:text-neutral-300 leading-relaxed">
-                  প্ল্যাটফর্মের উদ্দেশ্য, উন্মুক্ত প্রকাশনার দর্শন ও সাহিত্য নির্দেশিকা
-                </span>
-              </button>
+      {/* 3. FULL-WIDTH STORY SHELVES */}
+      <Shelf title={t("latest")} catById={catById} />
+      <Shelf title={t("fiction")} genre="fiction" catById={catById} />
+      <Shelf title={t("nonfiction")} genre="nonfiction" catById={catById} />
+      <Shelf title={t("experience")} genre="experience" catById={catById} />
 
-              {/* Pillar 2: পড়ুন (Read) */}
-              <Link
-                to="/browse"
-                className="group flex min-h-[96px] sm:min-h-[120px] w-full flex-col justify-center p-5 text-left transition-colors duration-150 hover:bg-black hover:text-white focus-visible:outline-2 focus-visible:outline-black"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs uppercase tracking-widest font-bold opacity-70 group-hover:opacity-100">
-                    ০২ • পড়ুন
-                  </span>
-                  <BookOpen className="h-5 w-5 stroke-2 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-transform" />
-                </div>
-                <span className="mt-1 font-display text-2xl sm:text-3xl font-black tracking-tight">
-                  পড়ুন
-                </span>
-                <span className="mt-1 text-xs font-sans text-neutral-600 group-hover:text-neutral-300 leading-relaxed">
-                  হাজারো গল্প, ধারাবাহিক উপন্যাস ও মননশীল প্রবন্ধের উন্মুক্ত সংগ্রহশালা
-                </span>
-              </Link>
-
-              {/* Pillar 3: লিখুন (Write) */}
-              <Link
-                to="/write"
-                className="group flex min-h-[96px] sm:min-h-[120px] w-full flex-col justify-center p-5 text-left transition-colors duration-150 hover:bg-black hover:text-white focus-visible:outline-2 focus-visible:outline-black"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs uppercase tracking-widest font-bold opacity-70 group-hover:opacity-100">
-                    ০৩ • লিখুন
-                  </span>
-                  <PenLine className="h-5 w-5 stroke-2 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-transform" />
-                </div>
-                <span className="mt-1 font-display text-2xl sm:text-3xl font-black tracking-tight">
-                  লিখুন
-                </span>
-                <span className="mt-1 text-xs font-sans text-neutral-600 group-hover:text-neutral-300 leading-relaxed">
-                  নিজের কথা ও মৌলিক সাহিত্য প্রকাশ করুন নিজের নামে অথবা ছদ্মনামে
-                </span>
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. 3D GENRE EXPLORER */}
-      <GenreExplorer />
-
-      {/* 4. 3D STORY SHELVES */}
-      <Shelf
-        title={t("latest")}
-        subtitle="লেখক ও পাঠকদের সদ্য প্রকাশিত তাজা লেখা ও পর্বসমূহ"
-        catById={catById}
-      />
-
-      <Shelf
-        title={t("fiction")}
-        subtitle="উপন্যাস, রূপকথা, কল্পবিজ্ঞান ও রোমাঞ্চকর সব কল্পকাহিনী"
-        genre="fiction"
-        catById={catById}
-      />
-
-      <Shelf
-        title={t("nonfiction")}
-        subtitle="মননশীল প্রবন্ধ, দর্শন, সমাজ ও সাহিত্যের ভাবনাসমূহ"
-        genre="nonfiction"
-        catById={catById}
-      />
-
-      <Shelf
-        title={t("experience")}
-        subtitle="ব্যক্তিগত স্মৃতিচারণ, ভ্রমণকাহিনি ও জীবনের বাস্তব চালচিত্র"
-        genre="experience"
-        catById={catById}
-      />
-
-      {/* 5. "জানুন" (KNOW) EDITORIAL SECTION */}
+      {/* 4. LITERARY GUIDE / KNOW SECTION */}
       <KnowSection />
-
-      {/* 6. COMMUNITY CALLOUT */}
-      <CommunityCallout />
     </div>
   );
 }
