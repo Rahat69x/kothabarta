@@ -92,7 +92,7 @@ function Browse() {
     genre !== "all" || status !== "all" || categoryId !== "all" || regional !== "all" || !!query;
 
   return (
-    <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-8">
+    <div className="mx-auto w-full max-w-[1720px] px-4 py-8 sm:px-8 lg:px-12">
       <h1 className="font-display text-2xl font-bold sm:text-3xl">{t("browseTitle")}</h1>
 
       <form

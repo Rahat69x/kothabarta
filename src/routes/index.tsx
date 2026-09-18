@@ -8,6 +8,8 @@ import {
   BookOpen,
   HelpCircle,
   ArrowRight,
+  Sparkles,
+  Star,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { fetchCategories, type Genre } from "@/lib/data";
@@ -339,6 +341,158 @@ function KnowSection() {
   );
 }
 
+const FEATURED_BOOKS = [
+  {
+    id: "c1010001-0000-4000-8000-000000000001",
+    title: "নন্দিত নরকে",
+    author: "হুমায়ূন আহমেদ",
+    genre: "কালজয়ী উপন্যাস",
+    cover: "/covers/cover-nondito-noroke.svg",
+    description: "এক মধ্যবিত্ত পরিবারের টানাপোড়েন, আলো-আঁধারির জীবনকথা ও মানবিক অনুভূতির অনন্য আলেখ্য।",
+    rating: "৪.৯",
+    readers: "১,২৮০",
+  },
+  {
+    id: "c1010001-0000-4000-8000-000000000003",
+    title: "দেবী",
+    author: "হুমায়ূন আহমেদ",
+    genre: "রহস্য ও মনস্তত্ত্ব",
+    cover: "/covers/cover-debi.svg",
+    description: "অতিপ্রাকৃতিক রহস্য ও মিসির আলির যুক্তিবাদের সংঘাত—রানু ও তার অদৃশ্য জগতের গল্প।",
+    rating: "৫.০",
+    readers: "২,১৪০",
+  },
+  {
+    id: "c1010001-0000-4000-8000-000000000015",
+    title: "জোছনা ও জননীর গল্প",
+    author: "হুমায়ূন আহমেদ",
+    genre: "মুক্তিযুদ্ধের মহাকাব্য",
+    cover: "/covers/cover-jochna-o-jononir-golpo.svg",
+    description: "১৯৭১ সালের রক্তঝরা দিনগুলি, সাধারণ মানুষের অসীম ত্যাগ ও ভালোবাসার মহাকাব্যিক উপন্যাস।",
+    rating: "৫.০",
+    readers: "৩,৫৬০",
+  },
+  {
+    id: "c1010001-0000-4000-8000-000000000012",
+    title: "আগুনের পরশমণি",
+    author: "হুমায়ূন আহমেদ",
+    genre: "ঐতিহাসিক কথাসাহিত্য",
+    cover: "/covers/cover-agun-er-poroshmoni.svg",
+    description: "অবরুদ্ধ ঢাকার বুকে মুক্তিযোদ্ধাদের গেরিলা প্রতিরোধ ও একটি পরিবারের বিনিদ্র রাতের উপাখ্যান।",
+    rating: "৪.৯",
+    readers: "১,৯২০",
+  },
+];
+
+function HeroFeaturedShowcase() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const activeBook = FEATURED_BOOKS[activeIdx];
+
+  return (
+    <div className="hidden lg:flex lg:col-span-5 flex-col items-center justify-center relative w-full">
+      {/* Decorative Glow */}
+      <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-primary/10 via-accent/15 to-transparent blur-2xl pointer-events-none" />
+
+      {/* Main Glass Showcase Card */}
+      <div className="relative w-full max-w-md rounded-2xl border border-border/80 bg-card/85 p-5 shadow-2xl backdrop-blur-md">
+        {/* Top Header Badge */}
+        <div className="flex items-center justify-between pb-3 mb-3.5 border-b border-border/60">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/15 text-primary text-[11px] font-semibold">
+            <Sparkles className="h-3 w-3" />
+            <span>জনপ্রিয় সংকলন</span>
+          </div>
+          <span className="font-mono text-[11px] text-muted-foreground">
+            {activeIdx + 1} / {FEATURED_BOOKS.length}
+          </span>
+        </div>
+
+        {/* Book Preview Body */}
+        <div className="flex items-start gap-4">
+          {/* 3D Styled Book Cover */}
+          <Link
+            to="/story/$storyId"
+            params={{ storyId: activeBook.id }}
+            className="group relative block w-32 shrink-0 aspect-[3/4] overflow-hidden rounded-lg shadow-xl ring-1 ring-black/10 transition-transform duration-300 hover:scale-105 hover:-rotate-1"
+          >
+            <img
+              src={activeBook.cover}
+              alt={activeBook.title}
+              className="h-full w-full object-cover"
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
+              <span className="text-[10px] font-bold text-white bg-primary px-1.5 py-0.5 rounded">
+                পড়ুন
+              </span>
+            </div>
+          </Link>
+
+          {/* Book Info */}
+          <div className="flex-1 min-w-0 flex flex-col justify-between self-stretch">
+            <div>
+              <span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-secondary text-secondary-foreground mb-1">
+                {activeBook.genre}
+              </span>
+              <h3 className="font-display text-lg font-bold text-foreground leading-snug line-clamp-1">
+                {activeBook.title}
+              </h3>
+              <p className="text-xs text-muted-foreground font-sans mt-0.5">
+                {activeBook.author}
+              </p>
+              <p className="mt-2 text-[11px] text-muted-foreground/90 line-clamp-3 leading-relaxed">
+                {activeBook.description}
+              </p>
+            </div>
+
+            <div className="mt-3 pt-2 border-t border-border/40 flex items-center justify-between">
+              <div className="flex items-center gap-1 text-[11px] text-amber-500 font-semibold">
+                <Star className="h-3.5 w-3.5 fill-amber-500" />
+                <span>{activeBook.rating}</span>
+                <span className="text-muted-foreground font-normal ml-1">({activeBook.readers})</span>
+              </div>
+
+              <Button
+                asChild
+                size="sm"
+                className="h-7 px-3 text-xs rounded-lg bg-primary text-primary-foreground font-medium hover:opacity-90"
+              >
+                <Link to="/story/$storyId" params={{ storyId: activeBook.id }}>
+                  <span>পড়ুন</span>
+                  <ArrowRight className="ml-1 h-3 w-3" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Thumbnail Selector Strip */}
+        <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between gap-2">
+          <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
+            অন্যান্য বই:
+          </span>
+          <div className="flex items-center gap-2">
+            {FEATURED_BOOKS.map((b, idx) => (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => setActiveIdx(idx)}
+                className={`relative w-9 aspect-[3/4] rounded overflow-hidden transition-all duration-200 ring-2 ${
+                  activeIdx === idx
+                    ? "ring-primary scale-105 shadow-md"
+                    : "ring-transparent opacity-60 hover:opacity-100"
+                }`}
+                title={b.title}
+              >
+                <img src={b.cover} alt={b.title} className="h-full w-full object-cover" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Home() {
   const { t } = useI18n();
   const { data: categories } = useQuery({ queryKey: ["categories"], queryFn: fetchCategories });
@@ -349,7 +503,7 @@ function Home() {
 
   return (
     <div className="bg-background text-foreground min-h-screen pb-16 relative overflow-x-hidden">
-      {/* 1. CLEAN FULL-WIDTH HERO SECTION (ORIGINAL KOTHABARTA FORMAT) */}
+      {/* 1. CLEAN FULL-WIDTH HERO SECTION WITH 2-COLUMN DESKTOP SHOWCASE (FILLS PC VIEWPORT) */}
       <section className="relative isolate flex min-h-[360px] sm:min-h-[440px] lg:min-h-[500px] items-center overflow-hidden border-b border-border/70">
         {/* Book Covers Wall Background Image */}
         <img
@@ -374,50 +528,72 @@ function Home() {
           aria-hidden="true"
         />
 
-        {/* Hero Typography & Actions */}
+        {/* Hero Responsive 2-Column Layout */}
         <div className={`${CONTAINER_WIDTH} py-12 sm:py-16 lg:py-20 relative z-10`}>
-          <div className="max-w-3xl">
-            {/* Tagline Pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/15 border border-primary/30 mb-3.5 text-[11px] font-semibold tracking-wider text-primary uppercase backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              <span>{t("appName")} · {t("motto")}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Branding, Headings, CTAs, Highlights */}
+            <div className="lg:col-span-7">
+              {/* Tagline Pill */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/15 border border-primary/30 mb-3.5 text-[11px] font-semibold tracking-wider text-primary uppercase backdrop-blur-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                <span>{t("appName")} · {t("motto")}</span>
+              </div>
+
+              {/* Main Title */}
+              <h1 className="font-display text-3xl leading-snug font-extrabold text-foreground sm:text-4xl sm:leading-tight lg:text-5xl">
+                জানুন, পড়ুন, লিখুন
+              </h1>
+
+              {/* Subtitle */}
+              <p className="mt-3 max-w-2xl text-xs sm:text-base text-muted-foreground leading-relaxed">
+                বাংলা গল্প, প্রবন্ধ ও বাস্তব অভিজ্ঞতার উন্মুক্ত সাহিত্য প্ল্যাটফর্ম — নিজের নামে অথবা ছদ্মনামে লিখুন, জানুন এবং পড়ুন সেরা সব লেখা।
+              </p>
+
+              {/* Action Buttons */}
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-10 sm:h-11 px-6 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:opacity-90 transition-all gap-2"
+                >
+                  <Link to="/write">
+                    <PenLine className="h-4 w-4" />
+                    <span>{t("quickPost")}</span>
+                  </Link>
+                </Button>
+
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="h-10 sm:h-11 px-6 rounded-xl border-border/80 bg-background/80 hover:bg-secondary text-foreground backdrop-blur-sm transition-all gap-2"
+                >
+                  <Link to="/browse">
+                    <BookOpen className="h-4 w-4 text-accent" />
+                    <span>{t("browse")}</span>
+                  </Link>
+                </Button>
+              </div>
+
+              {/* PC Desktop Highlights Bar (Fills wide display elegantly) */}
+              <div className="mt-8 pt-6 border-t border-border/60 grid grid-cols-3 gap-4 sm:gap-6 max-w-lg">
+                <div>
+                  <div className="font-display text-2xl lg:text-3xl font-bold text-foreground">৯৯+</div>
+                  <div className="text-xs text-muted-foreground mt-0.5 font-sans">অনন্য সাহিত্যগ্রন্থ</div>
+                </div>
+                <div>
+                  <div className="font-display text-2xl lg:text-3xl font-bold text-foreground">৩টি</div>
+                  <div className="text-xs text-muted-foreground mt-0.5 font-sans">প্রধান সাহিত্য ধারা</div>
+                </div>
+                <div>
+                  <div className="font-display text-2xl lg:text-3xl font-bold text-foreground">১০০%</div>
+                  <div className="text-xs text-muted-foreground mt-0.5 font-sans">উন্মুক্ত ও স্বাধীন পাঠ</div>
+                </div>
+              </div>
             </div>
 
-            {/* Main Title */}
-            <h1 className="font-display text-3xl leading-snug font-extrabold text-foreground sm:text-4xl sm:leading-tight lg:text-5xl">
-              জানুন, পড়ুন, লিখুন
-            </h1>
-
-            {/* Subtitle */}
-            <p className="mt-3 max-w-2xl text-xs sm:text-base text-muted-foreground leading-relaxed">
-              বাংলা গল্প, প্রবন্ধ ও বাস্তব অভিজ্ঞতার উন্মুক্ত সাহিত্য প্ল্যাটফর্ম — নিজের নামে অথবা ছদ্মনামে লিখুন, জানুন এবং পড়ুন সেরা সব লেখা।
-            </p>
-
-            {/* Action Buttons */}
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Button
-                asChild
-                size="lg"
-                className="h-10 sm:h-11 px-6 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:opacity-90 transition-all gap-2"
-              >
-                <Link to="/write">
-                  <PenLine className="h-4 w-4" />
-                  <span>{t("quickPost")}</span>
-                </Link>
-              </Button>
-
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="h-10 sm:h-11 px-6 rounded-xl border-border/80 bg-background/80 hover:bg-secondary text-foreground backdrop-blur-sm transition-all gap-2"
-              >
-                <Link to="/browse">
-                  <BookOpen className="h-4 w-4 text-accent" />
-                  <span>{t("browse")}</span>
-                </Link>
-              </Button>
-            </div>
+            {/* Right Column: Featured Literary Showcase (Fills the PC gap completely) */}
+            <HeroFeaturedShowcase />
           </div>
         </div>
       </section>
