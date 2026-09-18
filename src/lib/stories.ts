@@ -109,7 +109,8 @@ export async function fetchStories(filters: StoryFilters = {}) {
   let filtered99 = [...COLLECTION_99_STORIES];
 
   if (filters.genre && filters.genre !== "all") {
-    filtered99 = filtered99.filter((s) => storyGenres(s).includes(filters.genre!));
+    const g = filters.genre as Genre;
+    filtered99 = filtered99.filter((s) => storyGenres(s).includes(g));
   }
   if (filters.status && filters.status !== "all") {
     filtered99 = filtered99.filter((s) => s.status === filters.status);
