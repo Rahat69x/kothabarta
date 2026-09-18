@@ -93,9 +93,7 @@ function Browse() {
 
   return (
     <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-8">
-      <div className="border-b-2 border-foreground pb-2">
-        <h1 className="font-display text-2xl font-black sm:text-3xl">{t("browseTitle")}</h1>
-      </div>
+      <h1 className="font-display text-2xl font-bold sm:text-3xl">{t("browseTitle")}</h1>
 
       <form
         className="relative mt-5 max-w-2xl"

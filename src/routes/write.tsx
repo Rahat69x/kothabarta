@@ -106,8 +106,8 @@ function QuickWrite() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:py-10">
-      <Card className="relative border-2 border-foreground rounded-none sm:rounded-sm shadow-none">
+    <div className="mx-auto max-w-3xl px-4 py-10">
+      <Card className="relative">
         <Button
           type="button"
           variant="ghost"

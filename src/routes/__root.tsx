@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "জানুন, পড়ুন, লিখুন" },
       { property: "og:locale", content: "bn_BD" },
-      { name: "theme-color", content: "#ffffff" },
+      { name: "theme-color", content: "#140e0c" },
       { name: "robots", content: "index, follow" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "জানুন, পড়ুন, লিখুন — বাংলা গল্প, প্রবন্ধ ও অভিজ্ঞতার প্ল্যাটফর্ম" },
@@ -131,7 +131,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem('theme');var d=s==='dark';var r=document.documentElement;r.classList.toggle('dark',d);r.style.colorScheme=d?'dark':'light';r.style.backgroundColor=d?'#150f0d':'#ffffff';}catch(e){}})();`,
+            __html: `(function(){try{var s=localStorage.getItem('theme');var d=s!=='light';var r=document.documentElement;r.classList.toggle('dark',d);r.style.colorScheme=d?'dark':'light';r.style.backgroundColor=d?'#140e0c':'#fcfbf7';}catch(e){}})();`,
           }}
         />
       </head>

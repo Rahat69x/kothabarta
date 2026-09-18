@@ -5,7 +5,7 @@ export type Theme = "light" | "dark";
 type Ctx = { theme: Theme; setTheme: (t: Theme) => void; toggleTheme: () => void };
 
 const ThemeContext = createContext<Ctx>({
-  theme: "light",
+  theme: "dark",
   setTheme: () => {},
   toggleTheme: () => {},
 });
@@ -17,19 +17,19 @@ function apply(theme: Theme) {
 }
 
 function readTheme(): Theme {
-  if (typeof document === "undefined") return "light";
+  if (typeof document === "undefined") return "dark";
   if (document.documentElement.classList.contains("dark")) return "dark";
   const stored = window.localStorage.getItem("theme");
-  if (stored === "dark") return "dark";
-  return "light";
+  if (stored === "light") return "light";
+  return "dark";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   // The inline pre-hydration script in the root shell already set the class,
   // so this only mirrors the DOM state — no flash of the wrong theme.
-  // Start from "light" so SSR and the first client render agree (no hydration
+  // Start from "dark" so SSR and the first client render agree (no hydration
   // mismatch); the effect below syncs to the real DOM state right after mount.
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("dark");
 
   useEffect(() => {
     const current = readTheme();
