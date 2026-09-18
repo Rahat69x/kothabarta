@@ -1,6 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import {
   resolveCoverUrl,
+  storyGenres,
+  storyCategoryIds,
   STORY_COVERS,
   TITLE_COVERS,
   type Genre,
@@ -9,6 +11,7 @@ import {
   type Status,
   type Story,
 } from "./data";
+import { COLLECTION_99_STORIES, COLLECTION_99_PARTS } from "./collection_99";
 
 export const REMOVED_DUPLICATE_STORY_IDS = new Set<string>([
   "d3bbeb63-e53a-45df-a378-bf78b9e26519", // বৃষ্টিভেজা পঙক্তিমালা
@@ -42,7 +45,7 @@ export function enrichStoryWithUniqueCover(story: Story): Story {
   const uniqueCover =
     STORY_COVERS[story.id] ||
     TITLE_COVERS[story.title] ||
-    resolveCoverUrl(story.cover_url, story.id);
+    resolveCoverUrl(story.cover_url, story.id || story.title);
 
   return {
     ...story,
@@ -68,38 +71,80 @@ export async function fetchProfilesByIds(ids: string[]) {
 }
 
 export async function fetchStories(filters: StoryFilters = {}) {
-  let q = supabase
-    .from("stories")
-    .select("*")
-    .eq("is_published", true)
-    .order("created_at", { ascending: false });
+  let dbStories: Story[] = [];
+  try {
+    let q = supabase
+      .from("stories")
+      .select("*")
+      .eq("is_published", true)
+      .order("created_at", { ascending: false });
 
-  if (filters.limit) {
-    q = q.limit(filters.limit);
-  } else {
-    q = q.limit(60);
+    if (filters.limit) {
+      q = q.limit(filters.limit);
+    } else {
+      q = q.limit(120);
+    }
+
+    if (filters.genre && filters.genre !== "all") q = q.overlaps("genres", [filters.genre]);
+    if (filters.status && filters.status !== "all") q = q.eq("status", filters.status);
+    if (filters.categoryId && filters.categoryId !== "all")
+      q = q.overlaps("category_ids", [filters.categoryId]);
+
+    if (filters.regional && filters.regional !== "all")
+      q = q.eq("is_regional", filters.regional === "yes");
+    if (filters.search) q = q.ilike("title", `%${filters.search}%`);
+
+    const { data, error } = await q;
+    if (!error && data) {
+      dbStories = data as Story[];
+    }
+  } catch (err) {
+    console.error("Failed to query Supabase stories:", err);
   }
 
-  if (filters.genre && filters.genre !== "all") q = q.overlaps("genres", [filters.genre]);
-  if (filters.status && filters.status !== "all") q = q.eq("status", filters.status);
-  if (filters.categoryId && filters.categoryId !== "all")
-    q = q.overlaps("category_ids", [filters.categoryId]);
+  // Filter out removed duplicates from DB stories
+  const filteredDb = dbStories.filter((s) => !REMOVED_DUPLICATE_STORY_IDS.has(s.id));
 
-  if (filters.regional && filters.regional !== "all")
-    q = q.eq("is_regional", filters.regional === "yes");
-  if (filters.search) q = q.ilike("title", `%${filters.search}%`);
+  // Filter COLLECTION_99_STORIES according to the same filters
+  let filtered99 = [...COLLECTION_99_STORIES];
 
-  const { data, error } = await q;
-  if (error) throw error;
-  const stories = ((data ?? []) as Story[])
-    .filter((s) => !REMOVED_DUPLICATE_STORY_IDS.has(s.id))
-    .map(enrichStoryWithUniqueCover);
-  const profiles = await fetchProfilesByIds(stories.map((s) => s.writer_id));
-  return { stories, profiles };
+  if (filters.genre && filters.genre !== "all") {
+    filtered99 = filtered99.filter((s) => storyGenres(s).includes(filters.genre!));
+  }
+  if (filters.status && filters.status !== "all") {
+    filtered99 = filtered99.filter((s) => s.status === filters.status);
+  }
+  if (filters.categoryId && filters.categoryId !== "all") {
+    filtered99 = filtered99.filter((s) => storyCategoryIds(s).includes(filters.categoryId!));
+  }
+  if (filters.regional && filters.regional !== "all") {
+    filtered99 = filtered99.filter((s) => (filters.regional === "yes" ? s.is_regional : !s.is_regional));
+  }
+  if (filters.search) {
+    const sTerm = filters.search.toLowerCase();
+    filtered99 = filtered99.filter(
+      (s) =>
+        s.title.toLowerCase().includes(sTerm) ||
+        (s.description && s.description.toLowerCase().includes(sTerm))
+    );
+  }
+
+  // Combined collection and DB stories
+  const combined = [...filtered99, ...filteredDb].map(enrichStoryWithUniqueCover);
+  const finalStories = filters.limit ? combined.slice(0, filters.limit) : combined;
+
+  const profiles = await fetchProfilesByIds(finalStories.map((s) => s.writer_id));
+  return { stories: finalStories, profiles };
 }
 
 export async function fetchStory(storyId: string) {
   if (REMOVED_DUPLICATE_STORY_IDS.has(storyId)) return null;
+
+  const found99 = COLLECTION_99_STORIES.find((s) => s.id === storyId);
+  if (found99) {
+    return enrichStoryWithUniqueCover(found99);
+  }
+
   const { data, error } = await supabase.from("stories").select("*").eq("id", storyId).maybeSingle();
   if (error) throw error;
   return data ? enrichStoryWithUniqueCover(data as Story) : null;
@@ -107,6 +152,12 @@ export async function fetchStory(storyId: string) {
 
 export async function fetchParts(storyId: string, includeDrafts = false) {
   if (REMOVED_DUPLICATE_STORY_IDS.has(storyId)) return [];
+
+  if (COLLECTION_99_PARTS[storyId]) {
+    const parts = COLLECTION_99_PARTS[storyId];
+    return includeDrafts ? parts : parts.filter((p) => !p.is_draft);
+  }
+
   let q = supabase.from("parts").select("*").eq("story_id", storyId).order("part_number");
   if (!includeDrafts) q = q.eq("is_draft", false);
   const { data, error } = await q;
@@ -115,6 +166,11 @@ export async function fetchParts(storyId: string, includeDrafts = false) {
 }
 
 export async function fetchPart(partId: string) {
+  for (const pList of Object.values(COLLECTION_99_PARTS)) {
+    const match = pList.find((p) => p.id === partId);
+    if (match) return match;
+  }
+
   const { data, error } = await supabase.from("parts").select("*").eq("id", partId).maybeSingle();
   if (error) throw error;
   return (data as Part) ?? null;
