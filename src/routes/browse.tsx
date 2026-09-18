@@ -117,6 +117,94 @@ function Browse() {
         />
       </form>
 
+      {/* Quick Collection Filter Tags */}
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setParam({ q: undefined, genre: "all", category: undefined });
+          }}
+          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+            !query && genre === "all"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          }`}
+        >
+          সকল বই
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSearch("হুমায়ূন আহমেদ");
+            setParam({ q: "হুমায়ূন আহমেদ" });
+          }}
+          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+            query === "হুমায়ূন আহমেদ"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          }`}
+        >
+          হুমায়ূন আহমেদ ৯৯ সাহিত্য সংকলন
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSearch("উপন্যাস");
+            setParam({ q: "উপন্যাস" });
+          }}
+          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+            query === "উপন্যাস"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          }`}
+        >
+          কালজয়ী উপন্যাস
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSearch("রহস্য");
+            setParam({ q: "রহস্য" });
+          }}
+          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+            query === "রহস্য"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          }`}
+        >
+          রহস্য ও মিসির আলি
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSearch("মুক্তিযুদ্ধ");
+            setParam({ q: "মুক্তিযুদ্ধ" });
+          }}
+          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+            query === "মুক্তিযুদ্ধ"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          }`}
+        >
+          মুক্তিযুদ্ধের ইতিহাস
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSearch("সায়েন্স ফিকশন");
+            setParam({ q: "সায়েন্স ফিকশন" });
+          }}
+          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+            query === "সায়েন্স ফিকশন"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          }`}
+        >
+          সায়েন্স ফিকশন
+        </button>
+      </div>
+
       <section aria-labelledby="browse-filters-heading">
         <h2 id="browse-filters-heading" className="sr-only">
           {t("filters")}

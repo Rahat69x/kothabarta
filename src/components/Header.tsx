@@ -94,6 +94,17 @@ export function Header() {
           </Button>
 
           <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="hidden lg:inline-flex rounded-full text-xs font-semibold border-primary/40 bg-primary/10 text-primary hover:bg-primary/20"
+          >
+            <Link to="/browse">
+              <span>৯৯ গ্রন্থ সংকলন</span>
+            </Link>
+          </Button>
+
+          <Button
             variant="ghost"
             size="icon"
             onClick={toggleTheme}

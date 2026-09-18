@@ -48,17 +48,19 @@ function Shelf({
   title,
   subtitle,
   genre,
+  tag,
   catById,
 }: {
   title: string;
   subtitle?: string;
   genre?: Genre;
+  tag?: string;
   catById: Record<string, any>;
 }) {
   const { t } = useI18n();
   const { data, isLoading } = useQuery({
-    queryKey: ["stories", { shelf: genre ?? "latest" }],
-    queryFn: () => fetchStories(genre ? { genre } : {}),
+    queryKey: ["stories", { shelf: tag ?? genre ?? "latest" }],
+    queryFn: () => fetchStories({ ...(genre ? { genre } : {}), ...(tag ? { tag } : {}) }),
   });
 
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -113,7 +115,16 @@ function Shelf({
           asChild
           className="rounded-full text-xs hover:bg-secondary transition-all"
         >
-          <Link to="/browse" search={genre ? { genre } : {}}>
+          <Link
+            to="/browse"
+            search={
+              genre
+                ? { genre }
+                : tag
+                ? { q: tag === "কালজয়ী" ? "হুমায়ূন আহমেদ" : tag }
+                : {}
+            }
+          >
             <span>{t("viewAll")}</span>
             <ChevronRight className="ml-1 h-3.5 w-3.5" />
           </Link>
@@ -353,6 +364,16 @@ const FEATURED_BOOKS = [
     readers: "১,২৮০",
   },
   {
+    id: "c1010001-0000-4000-8000-000000000002",
+    title: "শঙ্খনীল কারাগার",
+    author: "হুমায়ূন আহমেদ",
+    genre: "কালজয়ী উপন্যাস",
+    cover: "/covers/cover-shonkhonil-karagar.svg",
+    description: "নীল কারাগারের ভেতর মুক্তির তৃষ্ণা, সম্পর্কের টানাপোড়েন ও চিরন্তন অনুভূতির উপন্যাস।",
+    rating: "৪.৯",
+    readers: "১,৬৫০",
+  },
+  {
     id: "c1010001-0000-4000-8000-000000000003",
     title: "দেবী",
     author: "হুমায়ূন আহমেদ",
@@ -361,6 +382,16 @@ const FEATURED_BOOKS = [
     description: "অতিপ্রাকৃতিক রহস্য ও মিসির আলির যুক্তিবাদের সংঘাত—রানু ও তার অদৃশ্য জগতের গল্প।",
     rating: "৫.০",
     readers: "২,১৪০",
+  },
+  {
+    id: "c1010001-0000-4000-8000-000000000012",
+    title: "আগুনের পরশমণি",
+    author: "হুমায়ূন আহমেদ",
+    genre: "মুক্তিযুদ্ধের কথাসাহিত্য",
+    cover: "/covers/cover-agun-er-poroshmoni.svg",
+    description: "অবরুদ্ধ ঢাকার বুকে মুক্তিযোদ্ধাদের গেরিলা প্রতিরোধ ও একটি পরিবারের বিনিদ্র রাতের উপাখ্যান।",
+    rating: "৪.৯",
+    readers: "১,৯২০",
   },
   {
     id: "c1010001-0000-4000-8000-000000000015",
@@ -373,14 +404,14 @@ const FEATURED_BOOKS = [
     readers: "৩,৫৬০",
   },
   {
-    id: "c1010001-0000-4000-8000-000000000012",
-    title: "আগুনের পরশমণি",
+    id: "c1010001-0000-4000-8000-000000000020",
+    title: "শ্রাবণ মেঘের দিন",
     author: "হুমায়ূন আহমেদ",
-    genre: "ঐতিহাসিক কথাসাহিত্য",
-    cover: "/covers/cover-agun-er-poroshmoni.svg",
-    description: "অবরুদ্ধ ঢাকার বুকে মুক্তিযোদ্ধাদের গেরিলা প্রতিরোধ ও একটি পরিবারের বিনিদ্র রাতের উপাখ্যান।",
+    genre: "গ্রামীণ জীবন ও প্রেম",
+    cover: "/covers/cover-srabon-megher-din.svg",
+    description: "ভাটি অঞ্চলের বৃষ্টিভেজা নদী, গান, মনপোড়ানো ভালোবাসা ও বিচ্ছেদের এক অনন্য সুর।",
     rating: "৪.৯",
-    readers: "১,৯২০",
+    readers: "২,০৮০",
   },
 ];
 
@@ -602,10 +633,33 @@ function Home() {
       <CorePillarsSection />
 
       {/* 3. FULL-WIDTH STORY SHELVES */}
-      <Shelf title={t("latest")} catById={catById} />
-      <Shelf title={t("fiction")} genre="fiction" catById={catById} />
-      <Shelf title={t("nonfiction")} genre="nonfiction" catById={catById} />
-      <Shelf title={t("experience")} genre="experience" catById={catById} />
+      {/* 3.1 Featured Spotlight: হুমায়ূন আহমেদ কালজয়ী সংকলন */}
+      <Shelf
+        title="কালজয়ী সাহিত্য সংকলন — হুমায়ূন আহমেদ"
+        subtitle="নন্দিত নরকে, শঙ্খনীল কারাগার, দেবী, দেয়াল ও মুক্তিযুদ্ধের কালজয়ী উপন্যাস"
+        tag="কালজয়ী"
+        catById={catById}
+      />
+
+      {/* 3.2 Mystery & Sci-Fi Shelf */}
+      <Shelf
+        title="রহস্য, রোমাঞ্চ ও কল্পবিজ্ঞান"
+        subtitle="মিসির আলি, অতিপ্রাকৃতিক গা-ছমছমে গল্প ও বিজ্ঞান কল্পকাহিনী"
+        tag="mystery-scifi"
+        catById={catById}
+      />
+
+      {/* 3.3 Latest Stories */}
+      <Shelf title={t("latest")} subtitle="সর্বশেষ প্রকাশিত গল্প ও ধারাবাহিক পর্বসমূহ" catById={catById} />
+
+      {/* 3.4 Fiction Shelf */}
+      <Shelf title={t("fiction")} subtitle="হাজারো ছোটগল্প, নাটক ও উপন্যাস" genre="fiction" catById={catById} />
+
+      {/* 3.5 Nonfiction Shelf */}
+      <Shelf title={t("nonfiction")} subtitle="মননশীল প্রবন্ধ, দর্শন ও জীবনবোধ" genre="nonfiction" catById={catById} />
+
+      {/* 3.6 Experience Shelf */}
+      <Shelf title={t("experience")} subtitle="বাস্তব অভিজ্ঞতা, ভ্রমণকাহিনী ও স্মৃতিচারণ" genre="experience" catById={catById} />
 
       {/* 4. LITERARY GUIDE / KNOW SECTION */}
       <KnowSection />

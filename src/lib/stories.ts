@@ -60,6 +60,7 @@ export type StoryFilters = {
   regional?: "all" | "yes" | "no";
   search?: string;
   limit?: number;
+  tag?: string;
 };
 
 export async function fetchProfilesByIds(ids: string[]) {
@@ -128,6 +129,25 @@ export async function fetchStories(filters: StoryFilters = {}) {
         s.title.toLowerCase().includes(sTerm) ||
         (s.description && s.description.toLowerCase().includes(sTerm))
     );
+  }
+  if (filters.tag) {
+    if (filters.tag === "কালজয়ী") {
+      filtered99 = filtered99.filter((s) =>
+        s.tags?.some((t) => t.includes("কালজয়ী") || t.includes("হুমায়ূন"))
+      );
+    } else if (filters.tag === "mystery-scifi") {
+      filtered99 = filtered99.filter(
+        (s) =>
+          s.category_id === "thriller-mystery" ||
+          s.category_id === "sci-fi" ||
+          s.tags?.some((t) => t.includes("রহস্য") || t.includes("কল্পবিজ্ঞান") || t.includes("সাই-ফাই"))
+      );
+    } else {
+      const tLower = filters.tag.toLowerCase();
+      filtered99 = filtered99.filter((s) =>
+        s.tags?.some((t) => t.toLowerCase().includes(tLower))
+      );
+    }
   }
 
   // Combined collection and DB stories
