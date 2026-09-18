@@ -1,5 +1,26 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { Genre, Part, Profile, Status, Story } from "./data";
+import {
+  resolveCoverUrl,
+  STORY_COVERS,
+  TITLE_COVERS,
+  type Genre,
+  type Part,
+  type Profile,
+  type Status,
+  type Story,
+} from "./data";
+
+export function enrichStoryWithUniqueCover(story: Story): Story {
+  const uniqueCover =
+    STORY_COVERS[story.id] ||
+    TITLE_COVERS[story.title] ||
+    resolveCoverUrl(story.cover_url, story.id);
+
+  return {
+    ...story,
+    cover_url: uniqueCover ?? story.cover_url,
+  };
+}
 
 export type StoryFilters = {
   genre?: Genre | "all";
@@ -36,7 +57,7 @@ export async function fetchStories(filters: StoryFilters = {}) {
 
   const { data, error } = await q;
   if (error) throw error;
-  const stories = (data ?? []) as Story[];
+  const stories = ((data ?? []) as Story[]).map(enrichStoryWithUniqueCover);
   const profiles = await fetchProfilesByIds(stories.map((s) => s.writer_id));
   return { stories, profiles };
 }
@@ -44,7 +65,7 @@ export async function fetchStories(filters: StoryFilters = {}) {
 export async function fetchStory(storyId: string) {
   const { data, error } = await supabase.from("stories").select("*").eq("id", storyId).maybeSingle();
   if (error) throw error;
-  return (data as Story) ?? null;
+  return data ? enrichStoryWithUniqueCover(data as Story) : null;
 }
 
 export async function fetchParts(storyId: string, includeDrafts = false) {

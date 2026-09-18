@@ -169,8 +169,8 @@ function StoryPage() {
         </div>
 
         <div className="order-first overflow-hidden rounded-lg bg-secondary paper-texture sm:order-last">
-          {resolveCoverUrl(story.cover_url) ? (
-            <img src={resolveCoverUrl(story.cover_url)!} alt={story.title} className="h-full w-full object-cover" />
+          {resolveCoverUrl(story.cover_url, story.id || story.title) ? (
+            <img src={resolveCoverUrl(story.cover_url, story.id || story.title)!} alt={story.title} className="h-full w-full object-cover" />
           ) : (
             <div className="flex aspect-[3/4] items-center justify-center">
               <BookOpen className="h-10 w-10 text-muted-foreground" />

@@ -189,9 +189,9 @@ function StoryEditor() {
               accept="image/*"
               onChange={(e) => e.target.files?.[0] && onCoverPick(e.target.files[0])}
             />
-            {resolveCoverUrl(form.cover_url) && (
+            {resolveCoverUrl(form.cover_url, storyId || form.title) && (
               <img
-                src={resolveCoverUrl(form.cover_url)!}
+                src={resolveCoverUrl(form.cover_url, storyId || form.title)!}
                 alt={form.title}
                 className="mt-2 aspect-[16/9] w-full rounded-md object-cover"
               />

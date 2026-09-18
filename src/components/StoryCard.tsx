@@ -23,7 +23,7 @@ export function StoryCard({
   category?: Category | null;
 }) {
   const { t, lang } = useI18n();
-  const coverSrc = resolveCoverUrl(story.cover_url);
+  const coverSrc = resolveCoverUrl(story.cover_url, story.id || story.title);
 
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotX, setRotX] = useState(0);
