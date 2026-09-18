@@ -102,7 +102,6 @@ const dict = {
   back: { bn: "ফিরে যান", en: "Back" },
   anonymous: { bn: "বেনামী", en: "Anonymous" },
   rating: { bn: "রেটিং", en: "rating" },
-  motto: { bn: "লিখুন মন খুলে", en: "Likhkhun Mon Khule" },
   darkMode: { bn: "ডার্ক মোড", en: "Dark mode" },
   lightMode: { bn: "লাইট মোড", en: "Light mode" },
   share: { bn: "শেয়ার", en: "Share" },
