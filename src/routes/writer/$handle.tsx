@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { authorName, fetchCategories, type Profile, type Story } from "@/lib/data";
+import { REMOVED_DUPLICATE_STORY_IDS, enrichStoryWithUniqueCover } from "@/lib/stories";
 import { ShareButton } from "@/components/ShareButton";
 import { WriterRating } from "@/components/WriterRating";
 import { StoryCard } from "@/components/StoryCard";
@@ -51,7 +52,9 @@ function WriterPage() {
         .eq("is_published", true)
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as Story[];
+      return ((data ?? []) as Story[])
+        .filter((s) => !REMOVED_DUPLICATE_STORY_IDS.has(s.id))
+        .map(enrichStoryWithUniqueCover);
     },
     enabled: !!profile,
   });
